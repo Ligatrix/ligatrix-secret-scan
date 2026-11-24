@@ -1,0 +1,30 @@
+#!/bin/sh
+# Sample git pre-commit hook: refuse a commit whose staged changes hold a credential.
+#
+# Install in one repository:
+#   cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# or share it with the team: copy it into a tracked .githooks/ folder and run
+#   git config core.hooksPath .githooks
+#
+# A false positive can be accepted with an inline "secret-scan:allow" comment or a
+# line in .secretscanignore. Bypassing the hook with --no-verify skips the check
+# entirely; CI runs the same scan, so the push is still caught.
+
+if command -v secret-scan >/dev/null 2>&1; then
+  scanner="secret-scan"
+elif [ -x node_modules/.bin/secret-scan ]; then
+  scanner="node_modules/.bin/secret-scan"
+else
+  echo "pre-commit: secret-scan is not installed; see https://github.com/Ligatrix/ligatrix-secret-scan" >&2
+  exit 1
+fi
+
+"$scanner" --staged
+status=$?
+
+if [ "$status" -eq 1 ]; then
+  echo "" >&2
+  echo "pre-commit: commit blocked. Remove the values above, rotate any that were real," >&2
+  echo "and load them from the environment or your secrets store." >&2
+fi
+exit "$status"
