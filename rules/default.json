@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "private-key",
+      "name": "Private key block",
+      "description": "A PEM or OpenPGP private key block (RSA, EC, DSA, OpenSSH, PKCS#8 or PGP) with key material.",
+      "severity": "high",
+      "keywords": ["private key"],
+      "pattern": "-----BEGIN ((?:RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY|PGP PRIVATE KEY BLOCK)-----\\r?\\n(?:[A-Za-z-]+: ?[^\\r\\n]*\\r?\\n)*\\s*([A-Za-z0-9+/]{32,}={0,2})",
+      "secretGroup": 2,
+      "minEntropy": 3.5
+    },
+    {
+      "id": "aws-access-key-id",
+      "name": "AWS access key ID",
+      "description": "An AWS access key ID (long-term AKIA or temporary ASIA credentials).",
+      "severity": "high",
+      "keywords": ["akia", "asia", "abia", "acca"],
+      "pattern": "(?<![A-Za-z0-9])((?:AKIA|ASIA|ABIA|ACCA)[A-Z2-7]{16})(?![A-Za-z0-9])",
+      "minEntropy": 3.0,
+      "stopwords": ["example"]
+    },
+    {
+      "id": "aws-secret-access-key",
+      "name": "AWS secret access key",
+      "description": "An AWS secret access key assigned next to an AWS key name. Reported with the access key ID it pairs with when both are in the same file.",
+      "severity": "high",
+      "keywords": ["aws"],
+      "pattern": "aws[A-Za-z0-9_.-]{0,20}?(?:secret|sk)[A-Za-z0-9_.-]{0,20}?[\"']?\\s*(?::|=|:=|=>)\\s*[\"']?([A-Za-z0-9/+]{40})(?![A-Za-z0-9/+])",
+      "flags": "i",
+      "minEntropy": 4.0,
+      "stopwords": ["example"],
+      "pairsWith": "aws-access-key-id"
+    },
+    {
+      "id": "github-token",
+      "name": "GitHub token",
+      "description": "A GitHub personal access token (ghp_), OAuth token (gho_), user-to-server token (ghu_), server-to-server token (ghs_) or refresh token (ghr_).",
+      "severity": "high",
+      "keywords": ["ghp_", "gho_", "ghu_", "ghs_", "ghr_"],
+      "pattern": "(?<![A-Za-z0-9_])((?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36})(?![A-Za-z0-9])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "github-fine-grained-token",
+      "name": "GitHub fine-grained token",
+      "description": "A GitHub fine-grained personal access token (github_pat_).",
+      "severity": "high",
+      "keywords": ["github_pat_"],
+      "pattern": "(?<![A-Za-z0-9_])(github_pat_[A-Za-z0-9]{22}_[A-Za-z0-9]{59})(?![A-Za-z0-9])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "stripe-live-key",
+      "name": "Stripe live secret key",
+      "description": "A Stripe secret key for live mode (sk_live_). Test-mode keys are not reported.",
+      "severity": "high",
+      "keywords": ["sk_live_"],
+      "pattern": "(?<![A-Za-z0-9_])(sk_live_[A-Za-z0-9]{24,99})(?![A-Za-z0-9])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "stripe-restricted-key",
+      "name": "Stripe live restricted key",
+      "description": "A Stripe restricted key for live mode (rk_live_).",
+      "severity": "high",
+      "keywords": ["rk_live_"],
+      "pattern": "(?<![A-Za-z0-9_])(rk_live_[A-Za-z0-9]{24,99})(?![A-Za-z0-9])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "slack-token",
+      "name": "Slack token",
+      "description": "A Slack bot, user, app or configuration token (xoxb-, xoxp-, xoxa-, xoxr-, xoxs-, xapp-).",
+      "severity": "high",
+      "keywords": ["xox", "xapp-"],
+      "pattern": "(?<![A-Za-z0-9_-])((?:xox[abprs]-[0-9]{8,13}-[A-Za-z0-9-]{8,}|xapp-[0-9]-[A-Z0-9]{8,}-[0-9]{8,}-[a-f0-9]{32,}))(?![A-Za-z0-9-])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "slack-webhook",
+      "name": "Slack incoming webhook URL",
+      "description": "A Slack incoming webhook or workflow trigger URL. Anyone holding it can post to the channel.",
+      "severity": "medium",
+      "keywords": ["hooks.slack.com"],
+      "pattern": "https://hooks\\.slack\\.com/(?:services|workflows|triggers)/(T[A-Z0-9]{6,}/[AB][A-Z0-9]{6,}/[A-Za-z0-9]{20,})",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "google-api-key",
+      "name": "Google API key",
+      "description": "A Google Cloud or Firebase API key (AIza).",
+      "severity": "medium",
+      "keywords": ["aiza"],
+      "pattern": "(?<![A-Za-z0-9_-])(AIza[0-9A-Za-z_-]{35})(?![0-9A-Za-z_-])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "twilio-api-key",
+      "name": "Twilio API key",
+      "description": "A Twilio API key SID (SK followed by 32 hex characters).",
+      "severity": "medium",
+      "keywords": ["sk"],
+      "pattern": "(?<![A-Za-z0-9])(SK[0-9a-f]{32})(?![A-Za-z0-9])",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "twilio-auth-token",
+      "name": "Twilio auth token",
+      "description": "A Twilio account auth token assigned next to a Twilio key name.",
+      "severity": "high",
+      "keywords": ["twilio"],
+      "pattern": "twilio[A-Za-z0-9_.-]{0,20}?(?:auth|token|secret)[A-Za-z0-9_.-]{0,20}?[\"']?\\s*(?::|=|:=|=>)\\s*[\"']?([a-f0-9]{32})(?![A-Za-z0-9])",
+      "flags": "i",
+      "minEntropy": 3.0
+    },
+    {
+      "id": "sendgrid-api-key",
+      "name": "SendGrid API key",
+      "description": "A SendGrid API key (SG. followed by two base64url parts).",
+      "severity": "high",
+      "keywords": ["sg."],
+      "pattern": "(?<![A-Za-z0-9_-])(SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43})(?![A-Za-z0-9_-])",
+      "minEntropy": 3.5
+    },
+    {
+      "id": "jwt",
+      "name": "JSON Web Token",
+      "description": "A signed JSON Web Token whose header decodes to JSON with an alg field. Often a long-lived service credential.",
+      "severity": "medium",
+      "keywords": ["eyj"],
+      "pattern": "(?<![A-Za-z0-9_-])(eyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{16,})(?![A-Za-z0-9_-])",
+      "minEntropy": 3.5,
+      "validate": "jwt"
+    },
+    {
+      "id": "database-url",
+      "name": "Database URL with password",
+      "description": "A connection string for Postgres, MySQL, MariaDB, SQL Server, MongoDB, Redis or AMQP with a password embedded in it.",
+      "severity": "high",
+      "keywords": ["://"],
+      "pattern": "(?<![A-Za-z0-9+])(?:postgres(?:ql)?|mysql|mariadb|mssql|sqlserver|mongodb(?:\\+srv)?|redis|rediss|amqps?)://[^\\s:@/\"'`]+:([^\\s@/\"'`]{3,})@[^\\s/\"'`]+",
+      "flags": "i",
+      "minEntropy": 2.5,
+      "stopwords": ["password", "passwd", "secret", "changeme", "${", "{{", "<", "xxx", "***", "%s"]
+    },
+    {
+      "id": "generic-assignment",
+      "name": "Hard-coded credential assignment",
+      "description": "A quoted value, or an unquoted value in a KEY=value line, assigned to a name containing password, secret, token or api key. Scored by entropy, with placeholders, environment lookups and escaped strings skipped.",
+      "severity": "medium",
+      "generic": true,
+      "keywords": ["pass", "pwd", "secret", "token", "key"],
+      "pattern": "([A-Za-z0-9_.-]*(?:password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|private[_-]?key)[A-Za-z0-9_.-]*)[\"']?[ \\t]*(?::|=|:=|=>)[ \\t]*(?:\"([^\"\\s\\\\$<>{}()]{8,200})\"|'([^'\\s\\\\$<>{}()]{8,200})'|`([^`\\s\\\\$<>{}()]{8,200})`|(?<=^[ \\t]*(?:export[ \\t]+)?[A-Za-z0-9_.-]+[ \\t]*=[ \\t]*)([^\\s\"'`#$<>{}();,]{8,200})(?=[ \\t]*(?:#.*)?$))",
+      "flags": "im",
+      "secretGroup": [2, 3, 4, 5],
+      "minEntropy": 3.0,
+      "stopwords": ["process.env", "os.environ", "getenv", "example", "placeholder", "changeme", "change_me", "your_", "your-", "dummy", "redacted", "xxxxxx", "******", "password", "secret", "token", "<", "..."]
+    },
+    {
+      "id": "dotenv-file",
+      "name": "Committed .env file",
+      "description": "A .env file in the tree. These hold real configuration values and belong in .gitignore; ship a .env.example instead.",
+      "severity": "medium",
+      "target": "path",
+      "pathPattern": "(?:^|/)\\.env(?:\\.[A-Za-z0-9_-]+)?$",
+      "pathExclude": "(?:^|/)\\.env\\.(?:example|sample|template|dist|defaults|schema)$"
+    }
+  ]
+}
