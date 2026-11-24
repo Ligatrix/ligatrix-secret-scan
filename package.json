@@ -1,0 +1,50 @@
+{
+  "name": "@ligatrix/secret-scan",
+  "version": "1.0.0",
+  "description": "Zero-dependency scanner that stops credentials from being committed: pre-commit hook, CI step, SARIF for code scanning.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "secret-scan": "bin/secret-scan.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.mjs"
+    }
+  },
+  "types": "./src/index.d.ts",
+  "files": [
+    "bin",
+    "src",
+    "rules",
+    "hooks",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "lint": "node scripts/lint.mjs",
+    "scan": "node bin/secret-scan.mjs ."
+  },
+  "keywords": [
+    "secrets",
+    "credentials",
+    "security",
+    "pre-commit",
+    "sarif",
+    "scanner"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ligatrix/ligatrix-secret-scan.git"
+  },
+  "homepage": "https://github.com/Ligatrix/ligatrix-secret-scan#readme",
+  "bugs": {
+    "url": "https://github.com/Ligatrix/ligatrix-secret-scan/issues"
+  }
+}
