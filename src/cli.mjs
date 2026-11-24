@@ -17,7 +17,7 @@ current directory; directories are walked with .gitignore applied.
 Options:
   --staged              scan the files staged for commit (git diff --cached)
   -f, --format <name>   output format: text (default), json or sarif
-  -o, --output <file>   write the report to a file instead of stdout
+  -o, --output <file>   write the output to a file instead of stdout
   --rules <file>        use this rules file instead of the bundled rules
   --ignore-file <file>  allowlist to use (default: .secretscanignore at the root)
   --max-size <size>     skip files larger than this (default 1m; accepts k and m)
